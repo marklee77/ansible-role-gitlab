@@ -13,20 +13,7 @@
     comment: GitLab User
     state: present
 
-- name: ensure that git postgresql user exits
-  postgresql_user:
-    name: git
-    role_attr_flags: CREATEDB
-    state: present
-    
-- name: ensure that gitlab postgresql database exists
-  postgresql_db:
-    name: gitlabhq_production
-    owner: git
-    template: template1
-    state: present
-
-- name: check sharelatex out of git repository
+- name: check gitlab out of git repository
   git:
     repo: https://gitlab.com/gitlab-org/gitlab-ce.git
     dest: /srv/gitlab

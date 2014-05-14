@@ -15,7 +15,6 @@
     - libgdbm-dev
     - libicu-dev
     - libncurses5-dev
-    - libpq-dev
     - libreadline-dev
     - libssl-dev
     - libxml2-dev
@@ -23,9 +22,6 @@
     - libyaml-dev
     - logrotate
     - openssh-server
-    - postgresql-9.3
-    - postgresql-client 
-    - python-psycopg2
     - redis-server
     - ruby2.0
     - zlib1g-dev
