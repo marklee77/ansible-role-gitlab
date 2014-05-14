@@ -1,2 +1,4 @@
 ---
-# tasks file for ansible-galaxy-gitlab
+- include: upgrade.yml
+- include: dependencies.yml
+- include: gitlab.yml

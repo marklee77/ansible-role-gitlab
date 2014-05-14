@@ -1,0 +1,82 @@
+---
+- name: ensure that git group exists
+  group:
+    name: git
+    state: present
+
+- name: ensure that git user exits
+  user:
+    name: git
+    group: git
+    home: /srv/gitlab
+    createhome: yes
+    comment: GitLab User
+    state: present
+
+- name: ensure that git postgresql user exits
+  postgresql_user:
+    name: git
+    role_attr_flags: CREATEDB
+    state: present
+    
+- name: ensure that gitlab postgresql database exists
+  postgresql_db:
+    name: gitlabhq_production
+    owner: git
+    template: template1
+    state: present
+
+- name: check sharelatex out of git repository
+  git:
+    repo: https://gitlab.com/gitlab-org/gitlab-ce.git
+    dest: /srv/gitlab
+    update: yes
+
+- name: ensure git user owns gitlab directory
+  file:
+    path: /srv/gitlab
+    recurse: yes
+    owner: git
+    group: git
+
+- name: ensure log directory exists and has correct permissions
+  file:
+    path: /srv/gitlab/log
+    recurse: yes
+    mode: 700
+    state: directory
+
+- name: ensure tmp directory exists and has correct permissions
+  file:
+    path: /srv/gitlab/tmp
+    recurse: yes
+    mode: 700
+    state: directory
+
+- name: ensure tmp/pids directory exists and has correct permissions
+  file:
+    path: /srv/gitlab/tmp/pids
+    recurse: yes
+    mode: 700
+    state: directory
+
+- name: ensure tmp/sockets directory exists and has correct permissions
+  file:
+    path: /srv/gitlab/tmp/sockets
+    recurse: yes
+    mode: 700
+    state: directory
+
+- name: ensure satellites directory exists and has correct permissions
+  file:
+    path: /srv/gitlab/gitlab-satellites
+    recurse: yes
+    mode: 750
+    state: directory
+
+- name: bundle install ruby gems
+  sudo_user: git
+  command: bundle install --deployment --without development test mysql aws 
+           chdir=/srv/gitlab
+
+
