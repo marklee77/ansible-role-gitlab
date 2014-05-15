@@ -1,2 +1,3 @@
 ---
-# vars file for ansible-galaxy-gitlab
+mysql_root_password: "{{ lookup('password', inventory_dir + '/credentials/mysql-root-password') }}"
+git_mysql_password: "{{ lookup('password', inventory_dir + '/credentials/git-mysql-password') }}"

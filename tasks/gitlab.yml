@@ -8,62 +8,78 @@
   user:
     name: git
     group: git
-    home: /srv/gitlab
+    home: /srv/git
     createhome: yes
     comment: GitLab User
     state: present
 
+- name: ensure gitlabhq_production database is present
+  mysql_db: 
+    name: gitlabhq_production
+
+- name: ensure git database user is present
+  mysql_user: 
+    name: git
+    host: "{{ item }}" 
+    password: "{{ git_mysql_password }}" 
+    priv: gitlabhq_production.*:ALL
+  with_items:
+    - "%"
+    - localhost
+
 - name: check gitlab out of git repository
+  sudo_user: git
   git:
     repo: https://gitlab.com/gitlab-org/gitlab-ce.git
-    dest: /srv/gitlab
+    dest: /srv/git/gitlab
     update: yes
-
-- name: ensure git user owns gitlab directory
-  file:
-    path: /srv/gitlab
-    recurse: yes
-    owner: git
-    group: git
 
 - name: ensure log directory exists and has correct permissions
   file:
-    path: /srv/gitlab/log
+    path: /srv/git/gitlab/log
+    owner: git
+    group: git
     recurse: yes
     mode: 700
     state: directory
 
 - name: ensure tmp directory exists and has correct permissions
   file:
-    path: /srv/gitlab/tmp
+    path: /srv/git/gitlab/tmp
+    owner: git
+    group: git
     recurse: yes
     mode: 700
     state: directory
 
 - name: ensure tmp/pids directory exists and has correct permissions
   file:
-    path: /srv/gitlab/tmp/pids
+    path: /srv/git/gitlab/tmp/pids
+    owner: git
+    group: git
     recurse: yes
     mode: 700
     state: directory
 
 - name: ensure tmp/sockets directory exists and has correct permissions
   file:
-    path: /srv/gitlab/tmp/sockets
+    path: /srv/git/gitlab/tmp/sockets
+    owner: git
+    group: git
     recurse: yes
     mode: 700
     state: directory
 
 - name: ensure satellites directory exists and has correct permissions
   file:
-    path: /srv/gitlab/gitlab-satellites
+    path: /srv/git/gitlab-satellites
+    owner: git
+    group: git
     recurse: yes
     mode: 750
     state: directory
 
 - name: bundle install ruby gems
   sudo_user: git
-  command: bundle install --deployment --without development test mysql aws 
-           chdir=/srv/gitlab
-
-
+  command: bundle install --deployment --without development test postgresql aws 
+           chdir=/srv/git/gitlab
