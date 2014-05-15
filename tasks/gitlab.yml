@@ -141,28 +141,28 @@
 
 - name: bundle install ruby gems
   sudo_user: git
-  shell: bundle install --deployment --without development test postgres aws && touch .bundle
+  shell: bundle install --deployment --without development test postgres aws && touch .bundle_install
          executable=/bin/bash
          chdir=/home/git/gitlab
-         creates=/home/git/gitlab/.bundle
+         creates=/home/git/gitlab/.bundle_install
   notify:
     - restart gitlab
 
 - name: configure gitlab shell
   sudo_user: git
-  shell: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .shell
+  shell: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .shell_install
          executable=/bin/bash
          chdir=/home/git/gitlab
-         creates=/home/git/gitlab/.shell
+         creates=/home/git/gitlab/.shell_install
   notify:
     - restart gitlab
 
 - name: compile assets if necessary
   sudo_user: git
-  shell: bundle exec rake assets:precompile RAILS_ENV=production && touch .assets
+  shell: bundle exec rake assets:precompile RAILS_ENV=production && touch .assets_precompile
          executable=/bin/bash
          chdir=/home/git/gitlab
-         creates=/home/git/gitlab/.assets
+         creates=/home/git/gitlab/.assets_precompile
   notify:
     - restart gitlab
 
