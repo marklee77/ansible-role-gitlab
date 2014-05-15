@@ -10,7 +10,7 @@
 
 - name: update gitlab site from template
   template:
-    src: templates/etc/nginx/sites-available/gitlab
+    src: etc/nginx/sites-available/gitlab
     dest: /etc/nginx/sites-available/gitlab
     owner: root
     group: root

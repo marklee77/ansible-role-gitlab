@@ -26,7 +26,7 @@
 # http://ansible.cc/docs/modules.html#mysql-user
 - name: copy .my.cnf file with root password credentials
   template: 
-    src: templates/root/.my.cnf 
+    src: root/.my.cnf 
     dest: /root/.my.cnf 
     owner: root 
     group: root 

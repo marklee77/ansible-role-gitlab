@@ -30,7 +30,7 @@
 
 - name: copy .my.cnf file with git password credentials
   template:
-    src: templates/home/git/.my.cnf
+    src: home/git/.my.cnf
     dest: /home/git/.my.cnf
     owner: git
     group: git
@@ -111,7 +111,7 @@
 
 - name: update gitlab.yml from template
   template:
-    src: templates/home/git/gitlab/config/gitlab.yml
+    src: home/git/gitlab/config/gitlab.yml
     dest: /home/git/gitlab/config/gitlab.yml
     owner: git
     group: git
@@ -121,7 +121,7 @@
 
 - name: update database.yml from template
   template:
-    src: templates/home/git/gitlab/config/database.yml
+    src: home/git/gitlab/config/database.yml
     dest: /home/git/gitlab/config/database.yml
     owner: git
     group: git
@@ -131,7 +131,7 @@
 
 - name: update unicorn.rb from template
   template:
-    src: templates/home/git/gitlab/config/unicorn.rb
+    src: home/git/gitlab/config/unicorn.rb
     dest: /home/git/gitlab/config/unicorn.rb
     owner: git
     group: git
