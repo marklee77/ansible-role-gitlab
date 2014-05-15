@@ -24,5 +24,6 @@
     - logrotate
     - openssh-server
     - redis-server
-    - ruby2.0
+    - ruby
+    - ruby-dev
     - zlib1g-dev

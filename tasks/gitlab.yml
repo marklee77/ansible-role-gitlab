@@ -40,7 +40,7 @@
     owner: git
     group: git
     recurse: yes
-    mode: 700
+    mode: 0700
     state: directory
 
 - name: ensure tmp directory exists and has correct permissions
@@ -49,7 +49,7 @@
     owner: git
     group: git
     recurse: yes
-    mode: 700
+    mode: 0700
     state: directory
 
 - name: ensure tmp/pids directory exists and has correct permissions
@@ -58,7 +58,7 @@
     owner: git
     group: git
     recurse: yes
-    mode: 700
+    mode: 0700
     state: directory
 
 - name: ensure tmp/sockets directory exists and has correct permissions
@@ -67,7 +67,7 @@
     owner: git
     group: git
     recurse: yes
-    mode: 700
+    mode: 0700
     state: directory
 
 - name: ensure satellites directory exists and has correct permissions
@@ -76,10 +76,34 @@
     owner: git
     group: git
     recurse: yes
-    mode: 750
+    mode: 0750
     state: directory
 
 - name: bundle install ruby gems
   sudo_user: git
-  command: bundle install --deployment --without development test postgresql aws 
+  command: bundle install --deployment --without development test postgres aws 
            chdir=/srv/git/gitlab
+
+- name: update gitlab.yml from template
+  template:
+    src: templates/srv/git/gitlab/config/gitlab.yml
+    dest: /srv/git/gitlab/config/gitlab.yml
+    owner: git
+    group: git
+    mode: 0600
+
+- name: update database.yml from template
+  template:
+    src: templates/srv/git/gitlab/config/database.yml
+    dest: /srv/git/gitlab/config/database.yml
+    owner: git
+    group: git
+    mode: 0600
+
+- name: update unicorn.rb from template
+  template:
+    src: templates/srv/git/gitlab/config/unicorn.rb
+    dest: /srv/git/gitlab/config/unicorn.rb
+    owner: git
+    group: git
+    mode: 0600
