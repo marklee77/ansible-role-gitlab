@@ -42,6 +42,8 @@
     repo: https://gitlab.com/gitlab-org/gitlab-ce.git
     dest: /home/git/gitlab
     update: yes
+  notify:
+    - restart gitlab
 
 - name: ensure log directory exists and has correct permissions
   file:
@@ -114,6 +116,8 @@
     owner: git
     group: git
     mode: 0600
+  notify:
+    - restart gitlab
 
 - name: update database.yml from template
   template:
@@ -122,6 +126,8 @@
     owner: git
     group: git
     mode: 0600
+  notify:
+    - restart gitlab
 
 - name: update unicorn.rb from template
   template:
@@ -130,6 +136,8 @@
     owner: git
     group: git
     mode: 0600
+  notify:
+    - restart gitlab
 
 - name: bundle install ruby gems
   sudo_user: git
@@ -137,6 +145,8 @@
          executable=/bin/bash
          chdir=/home/git/gitlab
          creates=/home/git/gitlab/.bundle
+  notify:
+    - restart gitlab
 
 - name: configure gitlab shell
   sudo_user: git
@@ -144,6 +154,8 @@
          executable=/bin/bash
          chdir=/home/git/gitlab
          creates=/home/git/gitlab/.shell
+  notify:
+    - restart gitlab
 
 - name: compile assets if necessary
   sudo_user: git
@@ -151,6 +163,8 @@
          executable=/bin/bash
          chdir=/home/git/gitlab
          creates=/home/git/gitlab/.assets
+  notify:
+    - restart gitlab
 
 - name: set up database if necessary 
   sudo_user: git
@@ -158,6 +172,8 @@
          executable=/bin/bash
          chdir=/home/git/gitlab
          creates=/home/git/gitlab/.setup
+  notify:
+    - restart gitlab
 
 - name: link to git init script
   file:

@@ -15,19 +15,13 @@
     owner: root
     group: root
     mode: 0644
-
+  notify:
+    - restart nginx
 
 - name: enable gitlab nginx configuration
   file:
     src: ../sites-available/gitlab
     path: /etc/nginx/sites-enabled/gitlab
     state: link
-
-# FIXME: put in handler...
-
-- name: ensure nginx is started and enabled
-  service:
-    name: nginx
-    state: restarted
-    enabled: yes
-
+  notify:
+    - restart nginx
