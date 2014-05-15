@@ -19,11 +19,11 @@
     - libreadline-dev
     - libssl-dev
     - libxml2-dev
-    - libxslt-dev
-    - libyaml-dev
+    - libxslt1-dev
     - logrotate
     - openssh-server
     - redis-server
     - ruby
     - ruby-dev
     - zlib1g-dev
+    - libyaml-dev

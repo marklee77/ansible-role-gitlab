@@ -8,8 +8,9 @@
   user:
     name: git
     group: git
-    home: /srv/git
+    home: /home/git
     createhome: yes
+    shell: /bin/bash
     comment: GitLab User
     state: present
 
@@ -27,16 +28,24 @@
     - "%"
     - localhost
 
+- name: copy .my.cnf file with git password credentials
+  template:
+    src: templates/home/git/.my.cnf
+    dest: /home/git/.my.cnf
+    owner: git
+    group: git
+    mode: 0600
+
 - name: check gitlab out of git repository
   sudo_user: git
   git:
     repo: https://gitlab.com/gitlab-org/gitlab-ce.git
-    dest: /srv/git/gitlab
+    dest: /home/git/gitlab
     update: yes
 
 - name: ensure log directory exists and has correct permissions
   file:
-    path: /srv/git/gitlab/log
+    path: /home/git/gitlab/log
     owner: git
     group: git
     recurse: yes
@@ -45,7 +54,7 @@
 
 - name: ensure tmp directory exists and has correct permissions
   file:
-    path: /srv/git/gitlab/tmp
+    path: /home/git/gitlab/tmp
     owner: git
     group: git
     recurse: yes
@@ -54,7 +63,7 @@
 
 - name: ensure tmp/pids directory exists and has correct permissions
   file:
-    path: /srv/git/gitlab/tmp/pids
+    path: /home/git/gitlab/tmp/pids
     owner: git
     group: git
     recurse: yes
@@ -63,7 +72,7 @@
 
 - name: ensure tmp/sockets directory exists and has correct permissions
   file:
-    path: /srv/git/gitlab/tmp/sockets
+    path: /home/git/gitlab/tmp/sockets
     owner: git
     group: git
     recurse: yes
@@ -72,38 +81,105 @@
 
 - name: ensure satellites directory exists and has correct permissions
   file:
-    path: /srv/git/gitlab-satellites
+    path: /home/git/gitlab-satellites
     owner: git
     group: git
     recurse: yes
     mode: 0750
     state: directory
 
-- name: bundle install ruby gems
-  sudo_user: git
-  command: bundle install --deployment --without development test postgres aws 
-           chdir=/srv/git/gitlab
+- name: ensure repositories directory exists and has correct permissions
+  file:
+    path: /home/git/repositories
+    owner: git
+    group: git
+    recurse: yes
+    mode: 0700
+    state: directory
+
+- name: ensure repositories/root directory exists and has correct permissions
+  file:
+    path: /home/git/repositories/root
+    owner: git
+    group: git
+    recurse: yes
+    mode: 0700
+    state: directory
+
 
 - name: update gitlab.yml from template
   template:
-    src: templates/srv/git/gitlab/config/gitlab.yml
-    dest: /srv/git/gitlab/config/gitlab.yml
+    src: templates/home/git/gitlab/config/gitlab.yml
+    dest: /home/git/gitlab/config/gitlab.yml
     owner: git
     group: git
     mode: 0600
 
 - name: update database.yml from template
   template:
-    src: templates/srv/git/gitlab/config/database.yml
-    dest: /srv/git/gitlab/config/database.yml
+    src: templates/home/git/gitlab/config/database.yml
+    dest: /home/git/gitlab/config/database.yml
     owner: git
     group: git
     mode: 0600
 
 - name: update unicorn.rb from template
   template:
-    src: templates/srv/git/gitlab/config/unicorn.rb
-    dest: /srv/git/gitlab/config/unicorn.rb
+    src: templates/home/git/gitlab/config/unicorn.rb
+    dest: /home/git/gitlab/config/unicorn.rb
     owner: git
     group: git
     mode: 0600
+
+- name: bundle install ruby gems
+  sudo_user: git
+  shell: bundle install --deployment --without development test postgres aws && touch .bundle
+         executable=/bin/bash
+         chdir=/home/git/gitlab
+         creates=/home/git/gitlab/.bundle
+
+- name: configure gitlab shell
+  sudo_user: git
+  shell: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .shell
+         executable=/bin/bash
+         chdir=/home/git/gitlab
+         creates=/home/git/gitlab/.shell
+
+- name: compile assets if necessary
+  sudo_user: git
+  shell: bundle exec rake assets:precompile RAILS_ENV=production && touch .assets
+         executable=/bin/bash
+         chdir=/home/git/gitlab
+         creates=/home/git/gitlab/.assets
+
+- name: set up database if necessary 
+  sudo_user: git
+  shell: bundle exec rake gitlab:setup RAILS_ENV=production <<< "yes" && touch .setup
+         executable=/bin/bash
+         chdir=/home/git/gitlab
+         creates=/home/git/gitlab/.setup
+
+- name: link to git init script
+  file:
+    src: /home/git/gitlab/lib/support/init.d/gitlab
+    path: /etc/init.d/gitlab
+    state: link
+
+- name: link to gitlab default script
+  file:
+    src: /home/git/gitlab/lib/support/init.d/gitlab.default.example
+    path: /etc/default/gitlab
+    state: link
+
+- name: link to gitlab logrotate configuration
+  file:
+    src: /home/git/gitlab/lib/support/logrotate/gitlab
+    path: /etc/logrotate.d/gitlab
+    state: link
+
+- name: ensure gitlab is started and enabled
+  service:
+    name: gitlab
+    state: started
+    enabled: yes
+
