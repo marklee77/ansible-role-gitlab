@@ -1,0 +1,30 @@
+---
+- name: ensure required nginx packages are installed
+  apt: 
+    pkg: "{{ item }}"
+    state: latest 
+    update_cache: yes 
+    cache_valid_time: 600
+  with_items:
+    - nginx
+
+- name: link to gitlab nginx configuration
+  file:
+    src: /home/git/gitlab/lib/support/nginx/gitlab
+    path: /etc/nginx/sites-available/gitlab
+    state: link
+
+- name: enable gitlab nginx configuration
+  file:
+    src: /etc/nginx/sites-available/gitlab
+    path: /etc/nginx/sites-enabled/gitlab
+    state: link
+
+# FIXME: put in handler...
+
+- name: ensure nginx is started and enabled
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+

@@ -3,3 +3,4 @@
 - include: dependencies.yml
 - include: mysql.yml
 - include: gitlab.yml
+- include: nginx.yml
