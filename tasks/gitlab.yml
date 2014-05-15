@@ -22,7 +22,7 @@
   mysql_user: 
     name: git
     host: "{{ item }}" 
-    password: "{{ git_mysql_password }}" 
+    password: "{{ gitlab_git_mysql_password }}" 
     priv: gitlabhq_production.*:ALL
   with_items:
     - "%"

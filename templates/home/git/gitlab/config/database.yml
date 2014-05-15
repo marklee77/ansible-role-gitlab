@@ -5,6 +5,6 @@ production:
   database: gitlabhq_production
   pool: 10
   username: git
-  password: "{{ git_mysql_password }}"
+  password: "{{ gitlab_git_mysql_password }}"
   # host: localhost
   # socket: /tmp/mysql.sock
