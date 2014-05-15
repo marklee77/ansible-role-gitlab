@@ -8,15 +8,18 @@
   with_items:
     - nginx
 
-- name: link to gitlab nginx configuration
-  file:
-    src: /home/git/gitlab/lib/support/nginx/gitlab
-    path: /etc/nginx/sites-available/gitlab
-    state: link
+- name: update gitlab site from template
+  template:
+    src: templates/etc/nginx/sites-available/gitlab
+    dest: /etc/nginx/sites-available/gitlab
+    owner: root
+    group: root
+    mode: 0644
+
 
 - name: enable gitlab nginx configuration
   file:
-    src: /etc/nginx/sites-available/gitlab
+    src: ../sites-available/gitlab
     path: /etc/nginx/sites-enabled/gitlab
     state: link
 

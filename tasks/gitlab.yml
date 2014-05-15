@@ -58,7 +58,7 @@
     owner: git
     group: git
     recurse: yes
-    mode: 0700
+    mode: 0755
     state: directory
 
 - name: ensure tmp/pids directory exists and has correct permissions
@@ -76,7 +76,7 @@
     owner: git
     group: git
     recurse: yes
-    mode: 0700
+    mode: 0755
     state: directory
 
 - name: ensure satellites directory exists and has correct permissions
