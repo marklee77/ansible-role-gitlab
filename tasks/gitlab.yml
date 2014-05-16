@@ -14,6 +14,12 @@
     comment: GitLab User
     state: present
 
+- name: ensure link to /srv/git exists
+  file:
+    src: /home/git
+    path: /srv/git
+    state: link
+
 - name: ensure gitlabhq_production database is present
   mysql_db: 
     name: gitlabhq_production
