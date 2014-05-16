@@ -14,6 +14,8 @@ Role Variables
 
 - gitlab_hostname: hostname that gitlab will service, will be set to "gitlab" by
                    default
+- gitlab_port: hostname that gitlab will service, will be set to 8080 by 
+               default.
 - gitlab_root_mysql_password: root mysql password, will be set to a random value 
                               by default.
 - gitlab_git_mysql_password: git mysql password, will be set to a random value 
