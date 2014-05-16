@@ -32,6 +32,12 @@ passed in as parameters) is always nice for users too:
       roles:
         - gitlab
 
+Try it Out
+---------------------------
+
+Check out the github repository, vagrant up, and load http://localhost:8888 in
+your web browser.
+
 License
 -------
 
