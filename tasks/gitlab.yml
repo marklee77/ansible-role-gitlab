@@ -1,4 +1,34 @@
 ---
+- name: ensure dependencies available through apt are installed
+  apt: 
+    pkg: "{{ item }}" 
+    state: latest 
+    update_cache: yes 
+    cache_valid_time: 600
+  with_items:
+    - build-essential
+    - bundler
+    - checkinstall
+    - curl
+    - git
+    - libcurl4-openssl-dev
+    - libffi-dev
+    - libgdbm-dev
+    - libicu-dev
+    - libmysqlclient-dev
+    - libncurses5-dev
+    - libreadline-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxslt1-dev
+    - logrotate
+    - openssh-server
+    - redis-server
+    - ruby
+    - ruby-dev
+    - zlib1g-dev
+    - libyaml-dev
+
 - name: ensure that git group exists
   group:
     name: git
@@ -205,3 +235,20 @@
     state: started
     enabled: yes
 
+- name: update gitlab nginx configuration from template
+  template:
+    src: etc/nginx/sites-available/gitlab
+    dest: /etc/nginx/sites-available/gitlab
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart nginx
+
+- name: enable gitlab nginx configuration
+  file:
+    src: ../sites-available/gitlab
+    path: /etc/nginx/sites-enabled/gitlab
+    state: link
+  notify:
+    - restart nginx

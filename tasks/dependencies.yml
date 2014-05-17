@@ -15,6 +15,7 @@
     - libffi-dev
     - libgdbm-dev
     - libicu-dev
+    - libmysqlclient-dev
     - libncurses5-dev
     - libreadline-dev
     - libssl-dev

@@ -8,20 +8,8 @@
   with_items:
     - nginx
 
-- name: update gitlab site from template
-  template:
-    src: etc/nginx/sites-available/gitlab
-    dest: /etc/nginx/sites-available/gitlab
-    owner: root
-    group: root
-    mode: 0644
-  notify:
-    - restart nginx
-
-- name: enable gitlab nginx configuration
-  file:
-    src: ../sites-available/gitlab
-    path: /etc/nginx/sites-enabled/gitlab
-    state: link
-  notify:
-    - restart nginx
+- name: ensure nginx is started and enabled
+  service:
+    name: nginx
+    state: started
+    enabled: yes
