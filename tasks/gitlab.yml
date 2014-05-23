@@ -72,6 +72,15 @@
     group: git
     mode: 0600
 
+- name: ensure gitlab directory exists and has correct permissions
+  file:
+    path: /home/git/gitlab
+    owner: git
+    group: git
+    recurse: no
+    mode: 0755
+    state: directory
+
 - name: check gitlab out of git repository
   sudo_user: git
   git:
