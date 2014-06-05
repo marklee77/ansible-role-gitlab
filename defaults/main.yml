@@ -3,4 +3,7 @@ gitlab_root_mysql_password: "{{ lookup('password', inventory_dir + '/credentials
 gitlab_git_mysql_password: "{{ lookup('password', inventory_dir + '/credentials/git-mysql-password') }}"
 
 gitlab_hostname: localhost
-gitlab_admin_web_password: testing
+gitlab_port: 80
+
+gitlab_admin_user_name: "admin@{{ gitlab_hostname }}"
+gitlab_admin_user_password: testing

@@ -15,33 +15,18 @@
     - libffi-dev
     - libgdbm-dev
     - libicu-dev
-    - libmysqlclient-dev
+    - libmariadbclient-dev
     - libncurses5-dev
     - libreadline-dev
     - libssl-dev
     - libxml2-dev
     - libxslt1-dev
     - logrotate
-    - openssh-server
     - redis-server
     - ruby
     - ruby-dev
     - zlib1g-dev
     - libyaml-dev
-
-- name: ensure gitlabhq_production database is present
-  mysql_db: 
-    name: gitlabhq_production
-
-- name: ensure git database user is present
-  mysql_user: 
-    name: git
-    host: "{{ item }}" 
-    password: "{{ gitlab_git_mysql_password }}" 
-    priv: gitlabhq_production.*:ALL
-  with_items:
-    - "%"
-    - localhost
 
 - name: ensure that git group exists
   group:
@@ -60,9 +45,24 @@
 
 - name: ensure link to /srv/git exists
   file:
-    src: /home/git
     path: /srv/git
+    src: /home/git
+    force: yes
     state: link
+
+- name: ensure gitlabhq_production database is present
+  mysql_db: 
+    name: gitlabhq_production
+
+- name: ensure git database user is present
+  mysql_user: 
+    name: git
+    host: "{{ item }}" 
+    password: "{{ gitlab_git_mysql_password }}" 
+    priv: gitlabhq_production.*:ALL
+  with_items:
+    - "%"
+    - localhost
 
 - name: update /home/git/.my.cnf from template
   template:
@@ -87,10 +87,11 @@
     repo: https://gitlab.com/gitlab-org/gitlab-ce.git
     dest: /home/git/gitlab
     update: yes
+    force: no
   notify:
     - restart gitlab
 
-- name: ensure log directory exists and has correct permissions
+- name: ensure /home/git/gitlab/log exists and has correct permissions
   file:
     path: /home/git/gitlab/log
     owner: git
@@ -99,7 +100,7 @@
     mode: 0700
     state: directory
 
-- name: ensure tmp directory exists and has correct permissions
+- name: ensure /home/git/gitlab/tmp exists and has correct permissions
   file:
     path: /home/git/gitlab/tmp
     owner: git
@@ -108,7 +109,7 @@
     mode: 0755
     state: directory
 
-- name: ensure tmp/pids directory exists and has correct permissions
+- name: ensure /home/git/gitlab/tmp/pids exists and has correct permissions
   file:
     path: /home/git/gitlab/tmp/pids
     owner: git
@@ -117,7 +118,7 @@
     mode: 0700
     state: directory
 
-- name: ensure tmp/sockets directory exists and has correct permissions
+- name: ensure /home/git/gitlab/tmp/sockets exists and has correct permissions
   file:
     path: /home/git/gitlab/tmp/sockets
     owner: git
@@ -126,7 +127,7 @@
     mode: 0755
     state: directory
 
-- name: ensure satellites directory exists and has correct permissions
+- name: ensure /home/git/gitlab-satellites exists and has correct permissions
   file:
     path: /home/git/gitlab-satellites
     owner: git
@@ -135,7 +136,7 @@
     mode: 0750
     state: directory
 
-- name: ensure repositories directory exists and has correct permissions
+- name: ensure /home/git/repositories exists and has correct permissions
   file:
     path: /home/git/repositories
     owner: git
@@ -144,7 +145,7 @@
     mode: 0700
     state: directory
 
-- name: ensure repositories/root directory exists and has correct permissions
+- name: ensure /home/git/repositories/root exists and has correct permissions
   file:
     path: /home/git/repositories/root
     owner: git
@@ -152,7 +153,6 @@
     recurse: yes
     mode: 0700
     state: directory
-
 
 - name: update gitlab.yml from template
   template:
@@ -184,74 +184,60 @@
   notify:
     - restart gitlab
 
-#creates=/home/git/gitlab/.bundle_install
 - name: bundle install ruby gems
   sudo_user: git
-  shell: bundle install --deployment --without development test postgres aws && touch .bundle_install
-         executable=/bin/bash
-         chdir=/home/git/gitlab
+  command: bundle install --deployment --without development test postgres aws
+           chdir=/home/git/gitlab
   register: bundle_install
+  changed_when: bundle_install.stdout.find("Installing") != -1
   notify:
     - restart gitlab
 
-- debug:
-    msg: "{{ bundle_install }}"
-
-#creates=/home/git/gitlab/.shell_install
 - name: configure gitlab shell
   sudo_user: git
-  shell: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .shell_install
-         executable=/bin/bash
-         chdir=/home/git/gitlab
-  register: rake_shell_install
+  command: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
+           chdir=/home/git/gitlab
+           creates=/home/git/.ssh/authorized_keys
   notify:
     - restart gitlab
 
-- debug:
-    msg: "{{ rake_shell_install }}"
-
-creates=/home/git/gitlab/.assets_precompile
 - name: compile assets if necessary
   sudo_user: git
-  shell: bundle exec rake assets:precompile RAILS_ENV=production && touch .assets_precompile
-         executable=/bin/bash
-         chdir=/home/git/gitlab
+  command: bundle exec rake assets:precompile RAILS_ENV=production
+           chdir=/home/git/gitlab
   register: rake_assets_precompile
+  changed_when: bundle_install.stdout.find("Writing") != -1
   notify:
     - restart gitlab
 
-- debug:
-    msg: "{{ rake_assets_precompile }}"
-
-#creates=/home/git/gitlab/.setup
 - name: set up database if necessary 
   sudo_user: git
-  shell: bundle exec rake gitlab:setup RAILS_ENV=production <<< "yes" && touch .setup
+  shell: bundle exec rake gitlab:setup RAILS_ENV=production <<< "yes" && touch ../.setup_database
          executable=/bin/bash
          chdir=/home/git/gitlab
-  register: rake_gitlab_setup
+         creates=/home/git/.setup_database
   notify:
     - restart gitlab
 
-- debug:
-    msg: "{{ rake_gitlab_setup }}"
-
-- name: link to git init script
+- name: ensure /etc/init.d/gitlab exists and links to /home/git/gitlab/lib/support/init.d/gitlab
   file:
-    src: /home/git/gitlab/lib/support/init.d/gitlab
     path: /etc/init.d/gitlab
+    src: /home/git/gitlab/lib/support/init.d/gitlab
+    force: yes
     state: link
 
-- name: link to gitlab default script
+- name: ensure /etc/default/gitlab exists and links to /home/git/gitlab/lib/support/init.d/gitlab.default.example
   file:
-    src: /home/git/gitlab/lib/support/init.d/gitlab.default.example
     path: /etc/default/gitlab
+    src: /home/git/gitlab/lib/support/init.d/gitlab.default.example
+    force: yes
     state: link
 
-- name: link to gitlab logrotate configuration
+- name: ensure /etc/logrotate.d/gitlab exists and links to /home/git/gitlab/lib/support/logrotate/gitlab
   file:
-    src: /home/git/gitlab/lib/support/logrotate/gitlab
     path: /etc/logrotate.d/gitlab
+    src: /home/git/gitlab/lib/support/logrotate/gitlab
+    force: yes
     state: link
 
 - name: ensure gitlab is started and enabled
@@ -260,7 +246,7 @@ creates=/home/git/gitlab/.assets_precompile
     state: started
     enabled: yes
 
-- name: update gitlab nginx configuration from template
+- name: update /etc/nginx/sites-available/gitlab from template
   template:
     src: etc/nginx/sites-available/gitlab
     dest: /etc/nginx/sites-available/gitlab
@@ -270,10 +256,11 @@ creates=/home/git/gitlab/.assets_precompile
   notify:
     - restart nginx
 
-- name: enable gitlab nginx configuration
+- name: ensure /etc/nginx/sites-enabled/gitlab exists and links to ../sites-available/gitlab
   file:
-    src: ../sites-available/gitlab
     path: /etc/nginx/sites-enabled/gitlab
+    src: ../sites-available/gitlab
+    force: yes
     state: link
   notify:
     - restart nginx
