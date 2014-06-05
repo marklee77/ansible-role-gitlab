@@ -21,12 +21,12 @@
     - libssl-dev
     - libxml2-dev
     - libxslt1-dev
+    - libyaml-dev
     - logrotate
     - redis-server
     - ruby
     - ruby-dev
     - zlib1g-dev
-    - libyaml-dev
 
 - name: ensure that git group exists
   group:
@@ -39,11 +39,9 @@
     group: git
     home: /home/git
     createhome: yes
-    shell: /bin/bash
-    comment: GitLab User
     state: present
 
-- name: ensure link to /srv/git exists
+- name: ensure /srv/git exists and links to /home/git
   file:
     path: /srv/git
     src: /home/git
@@ -72,32 +70,18 @@
     group: git
     mode: 0600
 
-- name: ensure /home/git/gitlab exists and has correct permissions
-  file:
-    path: /home/git/gitlab
-    owner: git
-    group: git
-    recurse: no
-    mode: 0755
-    state: directory
-
 - name: check gitlab out of git repository
   sudo_user: git
-  git:
-    repo: https://gitlab.com/gitlab-org/gitlab-ce.git
-    dest: /home/git/gitlab
-    update: yes
-    force: no
-  notify:
-    - restart gitlab
+  command: git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 6-9-stable /home/git/gitlab
+           creates=/home/git/gitlab
 
 - name: ensure /home/git/gitlab/log exists and has correct permissions
   file:
     path: /home/git/gitlab/log
     owner: git
     group: git
+    mode: u+rwX
     recurse: yes
-    mode: 0700
     state: directory
 
 - name: ensure /home/git/gitlab/tmp exists and has correct permissions
@@ -105,8 +89,8 @@
     path: /home/git/gitlab/tmp
     owner: git
     group: git
+    mode: u+rwX
     recurse: yes
-    mode: 0755
     state: directory
 
 - name: ensure /home/git/gitlab/tmp/pids exists and has correct permissions
@@ -114,8 +98,7 @@
     path: /home/git/gitlab/tmp/pids
     owner: git
     group: git
-    recurse: yes
-    mode: 0700
+    mode: u+rwX
     state: directory
 
 - name: ensure /home/git/gitlab/tmp/sockets exists and has correct permissions
@@ -123,8 +106,15 @@
     path: /home/git/gitlab/tmp/sockets
     owner: git
     group: git
-    recurse: yes
-    mode: 0755
+    mode: u+rwX
+    state: directory
+
+- name: ensure /home/git/gitlab/public/uploads exists and has correct permissions
+  file:
+    path: /home/git/gitlab/public/uploads
+    owner: git
+    group: git
+    mode: u+rwX
     state: directory
 
 - name: ensure /home/git/gitlab-satellites exists and has correct permissions
@@ -206,7 +196,7 @@
   command: bundle exec rake assets:precompile RAILS_ENV=production
            chdir=/home/git/gitlab
   register: rake_assets_precompile
-  changed_when: bundle_install.stdout.find("Writing") != -1
+  changed_when: rake_assets_precompile.stdout|length > 0
   notify:
     - restart gitlab
 
