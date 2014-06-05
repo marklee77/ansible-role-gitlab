@@ -70,7 +70,13 @@
     group: git
     mode: 0600
 
-# FIXME: update gitconfig from template too...
+- name: update /home/git/.gitconfig from template
+  template:
+    src: home/git/.gitconfig
+    dest: /home/git/.gitconfig
+    owner: git
+    group: git
+    mode: 0600
 
 - name: check gitlab out of git repository
   sudo_user: git
@@ -90,16 +96,9 @@
     - /home/git/gitlab/tmp/pids
     - /home/git/gitlab/tmp/sockets
     - /home/git/gitlab/public/uploads
+    - /home/git/gitlab-satellites
     - /home/git/repositories
     - /home/git/repositories/root
-
-- name: ensure /home/git/gitlab-satellites exists and has correct permissions
-  file:
-    path: /home/git/gitlab-satellites
-    owner: git
-    group: git
-    mode: 0750
-    state: directory
 
 - name: update gitlab config files from templates
   template:
@@ -150,28 +149,16 @@
   notify:
     - restart gitlab
 
-# FIXME: consolidate...
-
-- name: ensure /etc/init.d/gitlab exists and links to /home/git/gitlab/lib/support/init.d/gitlab
+- name: ensure gitlab links into /etc exist
   file:
-    path: /etc/init.d/gitlab
-    src: /home/git/gitlab/lib/support/init.d/gitlab
+    path: "{{ item.path }}"
+    src: "{{ item.src }}"
     force: yes
     state: link
-
-- name: ensure /etc/default/gitlab exists and links to /home/git/gitlab/lib/support/init.d/gitlab.default.example
-  file:
-    path: /etc/default/gitlab
-    src: /home/git/gitlab/lib/support/init.d/gitlab.default.example
-    force: yes
-    state: link
-
-- name: ensure /etc/logrotate.d/gitlab exists and links to /home/git/gitlab/lib/support/logrotate/gitlab
-  file:
-    path: /etc/logrotate.d/gitlab
-    src: /home/git/gitlab/lib/support/logrotate/gitlab
-    force: yes
-    state: link
+  with_items:
+    - { path: /etc/init.d/gitlab, src: /home/git/gitlab/lib/support/init.d/gitlab }
+    - { path: /etc/default/gitlab, src: /home/git/gitlab/lib/support/init.d/gitlab.default.example }
+    - { path: /etc/logrotate.d/gitlab, src: /home/git/gitlab/lib/support/logrotate/gitlab }
 
 - name: ensure gitlab is started and enabled
   service:

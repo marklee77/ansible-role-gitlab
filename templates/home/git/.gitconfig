@@ -1,0 +1,5 @@
+[user]
+        name = GitLab
+        email = {{ gitlab_git_user_email }}
+[core]
+        autocrlf = input

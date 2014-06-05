@@ -7,3 +7,5 @@ gitlab_port: 80
 
 gitlab_admin_user_name: "admin@{{ gitlab_hostname }}"
 gitlab_admin_user_password: testing
+
+gitlab_git_user_email: "git@{{ gitlab_hostname }}"
