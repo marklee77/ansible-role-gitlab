@@ -80,8 +80,7 @@
     path: /home/git/gitlab/log
     owner: git
     group: git
-    mode: u+rwX
-    recurse: yes
+    mode: 0700
     state: directory
 
 - name: ensure /home/git/gitlab/tmp exists and has correct permissions
@@ -89,8 +88,7 @@
     path: /home/git/gitlab/tmp
     owner: git
     group: git
-    mode: u+rwX
-    recurse: yes
+    mode: 0700
     state: directory
 
 - name: ensure /home/git/gitlab/tmp/pids exists and has correct permissions
@@ -98,7 +96,7 @@
     path: /home/git/gitlab/tmp/pids
     owner: git
     group: git
-    mode: u+rwX
+    mode: 0700
     state: directory
 
 - name: ensure /home/git/gitlab/tmp/sockets exists and has correct permissions
@@ -106,7 +104,7 @@
     path: /home/git/gitlab/tmp/sockets
     owner: git
     group: git
-    mode: u+rwX
+    mode: 0700
     state: directory
 
 - name: ensure /home/git/gitlab/public/uploads exists and has correct permissions
@@ -114,7 +112,7 @@
     path: /home/git/gitlab/public/uploads
     owner: git
     group: git
-    mode: u+rwX
+    mode: 0700
     state: directory
 
 - name: ensure /home/git/gitlab-satellites exists and has correct permissions
