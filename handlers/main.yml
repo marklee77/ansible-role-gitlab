@@ -3,6 +3,8 @@
   service:
     name: gitlab
     state: restarted
+  notify:
+    - restart nginx
  
 - name: restart nginx
   service:

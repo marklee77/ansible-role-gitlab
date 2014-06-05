@@ -1,5 +1,3 @@
 ---
-- include: upgrade.yml
-- include: mysql.yml
 - include: nginx.yml
 - include: gitlab.yml

@@ -2,14 +2,7 @@
 galaxy_info:
   author: Mark Stillwell
   description: GitLab web service
-  # Some suggested licenses:
-  # - BSD (default)
-  # - MIT
-  # - GPLv2
-  # - GPLv3
-  # - Apache
-  # - CC-BY
-  license: Affero GPL
+  license: GPLv2
   min_ansible_version: 1.2
   platforms:
   - name: Ubuntu
@@ -17,4 +10,5 @@ galaxy_info:
     - trusty
   categories:
   - web
-dependencies: []
+dependencies:
+  - marklee77.mariadb
