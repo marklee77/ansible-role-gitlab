@@ -70,105 +70,48 @@
     group: git
     mode: 0600
 
+# FIXME: update gitconfig from template too...
+
 - name: check gitlab out of git repository
   sudo_user: git
   command: git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 6-9-stable /home/git/gitlab
            creates=/home/git/gitlab
 
-- name: ensure /home/git/gitlab/log exists and has correct permissions
+- name: ensure gitlab subdirectories exist and have correct permissions
   file:
-    path: /home/git/gitlab/log
+    path: "{{ item }}"
     owner: git
     group: git
     mode: 0700
     state: directory
-
-- name: ensure /home/git/gitlab/tmp exists and has correct permissions
-  file:
-    path: /home/git/gitlab/tmp
-    owner: git
-    group: git
-    mode: 0700
-    state: directory
-
-- name: ensure /home/git/gitlab/tmp/pids exists and has correct permissions
-  file:
-    path: /home/git/gitlab/tmp/pids
-    owner: git
-    group: git
-    mode: 0700
-    state: directory
-
-- name: ensure /home/git/gitlab/tmp/sockets exists and has correct permissions
-  file:
-    path: /home/git/gitlab/tmp/sockets
-    owner: git
-    group: git
-    mode: 0700
-    state: directory
-
-- name: ensure /home/git/gitlab/public/uploads exists and has correct permissions
-  file:
-    path: /home/git/gitlab/public/uploads
-    owner: git
-    group: git
-    mode: 0700
-    state: directory
+  with_items:
+    - /home/git/gitlab/log
+    - /home/git/gitlab/tmp
+    - /home/git/gitlab/tmp/pids
+    - /home/git/gitlab/tmp/sockets
+    - /home/git/gitlab/public/uploads
+    - /home/git/repositories
+    - /home/git/repositories/root
 
 - name: ensure /home/git/gitlab-satellites exists and has correct permissions
   file:
     path: /home/git/gitlab-satellites
     owner: git
     group: git
-    recurse: yes
     mode: 0750
     state: directory
 
-- name: ensure /home/git/repositories exists and has correct permissions
-  file:
-    path: /home/git/repositories
-    owner: git
-    group: git
-    recurse: yes
-    mode: 0700
-    state: directory
-
-- name: ensure /home/git/repositories/root exists and has correct permissions
-  file:
-    path: /home/git/repositories/root
-    owner: git
-    group: git
-    recurse: yes
-    mode: 0700
-    state: directory
-
-- name: update gitlab.yml from template
+- name: update gitlab config files from templates
   template:
-    src: home/git/gitlab/config/gitlab.yml
-    dest: /home/git/gitlab/config/gitlab.yml
+    src: home/git/gitlab/config/{{ item }}
+    dest: /home/git/gitlab/config/{{ item }}
     owner: git
     group: git
     mode: 0600
-  notify:
-    - restart gitlab
-
-- name: update database.yml from template
-  template:
-    src: home/git/gitlab/config/database.yml
-    dest: /home/git/gitlab/config/database.yml
-    owner: git
-    group: git
-    mode: 0600
-  notify:
-    - restart gitlab
-
-- name: update unicorn.rb from template
-  template:
-    src: home/git/gitlab/config/unicorn.rb
-    dest: /home/git/gitlab/config/unicorn.rb
-    owner: git
-    group: git
-    mode: 0600
+  with_items:
+    - gitlab.yml
+    - database.yml
+    - unicorn.rb
   notify:
     - restart gitlab
 
@@ -206,6 +149,8 @@
          creates=/home/git/.setup_database
   notify:
     - restart gitlab
+
+# FIXME: consolidate...
 
 - name: ensure /etc/init.d/gitlab exists and links to /home/git/gitlab/lib/support/init.d/gitlab
   file:
