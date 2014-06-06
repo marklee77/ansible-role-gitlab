@@ -1,11 +1,10 @@
 admin = User.create(
-  email: "admin@local.host",
-  name: "Administrator",
-  username: 'root',
-  password: "5iveL!fe",
-  password_confirmation: "5iveL!fe",
-  password_expires_at: Time.now,
-  theme_id: Gitlab::Theme::MARS
+  email: "{{ gitlab_admin_email }}",
+  name: "{{ gitlab_admin_name }}",
+  username: '{{ gitlab_admin_username }}',
+  password: "{{ gitlab_admin_password }}",
+  password_confirmation: "{{ gitlab_admin_password }}",
+  theme_id: {{ gitlab_admin_theme_id }}
 
 )
 
@@ -18,7 +17,7 @@ if admin.valid?
 puts %q[
 Administrator account created:
 
-login.........admin@local.host
-password......5iveL!fe
+login.........{{ gitlab_admin_email }}
+password......**********
 ]
 end

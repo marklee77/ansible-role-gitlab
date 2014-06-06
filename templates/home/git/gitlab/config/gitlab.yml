@@ -15,14 +15,15 @@ production: &base
   ## GitLab settings
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
-    host: localhost
-    port: 80
-    https: false
+    host: {{ gitlab_hostname }}
+    port: {{ gitlab_port }}
+    https: {{ gitlab_https }}
 
     # Uncommment this line below if your ssh host is different from HTTP/HTTPS one
     # (you'd obviously need to replace ssh.host_example.com with your own host).
     # Otherwise, ssh host will be set to the `host:` value above
     # ssh_host: ssh.host_example.com
+    ssh_host: {{ gitlab_ssh_hostname }}
 
     # WARNING: See config/application.rb under "Relative url support" for the list of
     # other files that need to be changed for relative url support
@@ -33,10 +34,10 @@ production: &base
 
     ## Email settings
     # Email address used in the "From" field in mails sent by GitLab
-    email_from: gitlab@localhost
+    email_from: {{ gitlab_admin_email }}
 
     # Email address of your support contact (default: same as email_from)
-    support_email: support@localhost
+    support_email: {{ gitlab_admin_email }}
 
     ## User settings
     default_projects_limit: 10
@@ -53,7 +54,7 @@ production: &base
 
     ## Users management
     # default: false - Account passwords are not sent via the email if signup is enabled.
-    # signup_enabled: true
+    signup_enabled: {{ gitlab_signup_enabled }}
     #
     # default: true - If set to false, standard login form won't be shown on the sign-in page
     # signin_enabled: false

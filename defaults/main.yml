@@ -3,9 +3,17 @@ gitlab_root_mysql_password: "{{ lookup('password', inventory_dir + '/credentials
 gitlab_git_mysql_password: "{{ lookup('password', inventory_dir + '/credentials/git-mysql-password') }}"
 
 gitlab_hostname: localhost
+gitlab_ssh_hostname: "{{ gitlab_hostname }}"
 gitlab_port: 80
+gitlab_https: "false"
 
-gitlab_admin_user_name: "admin@{{ gitlab_hostname }}"
-gitlab_admin_user_password: testing
+gitlab_signup_enabled: "false"
 
 gitlab_git_user_email: "git@{{ gitlab_hostname }}"
+
+gitlab_admin_email: "{{ gitlab_git_user_email }}"
+gitlab_admin_name: Administrator
+gitlab_admin_username: root
+gitlab_admin_password: testing
+gitlab_admin_theme_id: "Gitlab::Theme::MARS"
+
