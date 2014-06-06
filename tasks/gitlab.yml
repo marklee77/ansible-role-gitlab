@@ -102,15 +102,16 @@
 
 - name: update gitlab config files from templates
   template:
-    src: home/git/gitlab/config/{{ item }}
-    dest: /home/git/gitlab/config/{{ item }}
+    src: home/git/gitlab/{{ item }}
+    dest: /home/git/gitlab/{{ item }}
     owner: git
     group: git
     mode: 0600
   with_items:
-    - gitlab.yml
-    - database.yml
-    - unicorn.rb
+    - config/gitlab.yml
+    - config/database.yml
+    - config/unicorn.rb
+    - db/fixtures/production/001_admin.rb
   notify:
     - restart gitlab
 
