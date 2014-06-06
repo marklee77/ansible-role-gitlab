@@ -196,7 +196,7 @@
 - name: ensure that there is not a hostname collision with the nginx default host
   lineinfile:
     dest: /etc/nginx/sites-available/default
-    regexp: '^(\s+)(server_name {{ gitlab_hostname }};)$'
+    regexp: '^(\s+)(server_name {{ gitlab_hostname }};.*)$'
     backrefs: yes
     line: '\1#\2'
     state: present
