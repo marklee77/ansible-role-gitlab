@@ -101,6 +101,7 @@
     - /home/git/repositories
     - /home/git/repositories/root
 
+#- db/fixtures/production/001_admin.rb
 - name: update gitlab config files from templates
   template:
     src: home/git/gitlab/{{ item }}
@@ -112,7 +113,6 @@
     - config/gitlab.yml
     - config/database.yml
     - config/unicorn.rb
-    - db/fixtures/production/001_admin.rb
   notify:
     - restart gitlab
 
@@ -171,7 +171,7 @@
     force: yes
     state: link
   notify:
-    - restart nginx
+    - restart gitlab
 
 - name: ensure gitlab services are started and enabled
   service:
