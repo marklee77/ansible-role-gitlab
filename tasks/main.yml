@@ -84,19 +84,29 @@
   command: git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 6-9-stable /home/git/gitlab
            creates=/home/git/gitlab
 
-- name: ensure gitlab subdirectories exist and have correct permissions
+- name: ensure publicly accessible gitlab subdirectories exist and have correct permissions
   file:
     path: "{{ item }}"
     owner: git
     group: git
-    mode: 0700
+    mode: 0755
+    state: directory
+  with_items:
+    - /home/git/gitlab/tmp
+    - /home/git/gitlab/tmp/sockets
+    - /home/git/gitlab/public
+    - /home/git/gitlab/public/uploads
+
+- name: ensure private gitlab subdirectories exist and have correct permissions
+  file:
+    path: "{{ item }}"
+    owner: git
+    group: git
+    mode: 0750
     state: directory
   with_items:
     - /home/git/gitlab/log
-    - /home/git/gitlab/tmp
     - /home/git/gitlab/tmp/pids
-    - /home/git/gitlab/tmp/sockets
-    - /home/git/gitlab/public/uploads
     - /home/git/gitlab-satellites
 
 - name: ensure repository directories exist and have correct permissions
@@ -180,6 +190,16 @@
     src: ../sites-available/gitlab
     force: yes
     state: link
+  notify:
+    - restart gitlab
+
+- name: ensure that there is not a hostname collision with the nginx default host
+  lineinfile:
+    dest: /etc/nginx/sites-available/default
+    regexp: '^(\s+)(server_name {{ gitlab_hostname }};)$'
+    backrefs: yes
+    line: '\1#\2'
+    state: present
   notify:
     - restart gitlab
 
