@@ -110,7 +110,6 @@
     - /home/git/repositories
     - /home/git/repositories/root
 
-#- db/fixtures/production/001_admin.rb
 - name: update gitlab config files from templates
   template:
     src: home/git/gitlab/{{ item }}
@@ -122,35 +121,37 @@
     - config/gitlab.yml
     - config/database.yml
     - config/unicorn.rb
+    - db/fixtures/production/001_admin.rb
   notify:
     - restart gitlab
 
 - name: bundle install ruby gems
   sudo_user: git
-  shell: bundle install --deployment --without development test postgres aws && touch .bundle_install
+  shell: bundle install --deployment --without development test postgres aws && touch .bundle_installed
          executable=/bin/bash
          chdir=/home/git/gitlab
-         creates=/home/git/gitlab/.bundle_install
+         creates=/home/git/gitlab/.bundle_installed
 
 - name: install gitlab shell
   sudo_user: git
-  command: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production
-           chdir=/home/git/gitlab
-           creates=/home/git/gitlab-shell
+  shell: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .gitlab_shell_installed
+         executable=/bin/bash
+         chdir=/home/git/gitlab
+         creates=/home/git/gitlab/.gitlab_shell_installed
 
 - name: precompile assets
   sudo_user: git
-  shell: bundle exec rake assets:precompile RAILS_ENV=production && touch .rake_assets_precompile
+  shell: bundle exec rake assets:precompile RAILS_ENV=production && touch .assets_precompiled
          executable=/bin/bash
          chdir=/home/git/gitlab
-         creates=/home/git/gitlab/.rake_assets_precompile
+         creates=/home/git/gitlab/.assets_precompiled
 
 - name: initialize database
   sudo_user: git
-  shell: bundle exec rake gitlab:setup RAILS_ENV=production <<< "yes" && touch .rake_gitlab_setup
+  shell: bundle exec rake gitlab:setup RAILS_ENV=production <<< "yes" && touch .gitlab_db_setup
          executable=/bin/bash
          chdir=/home/git/gitlab
-         creates=/home/git/gitlab/.rake_gitlab_setup
+         creates=/home/git/gitlab/.gitlab_db_setup
 
 - name: ensure gitlab links into /etc exist
   file:

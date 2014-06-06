@@ -4,7 +4,6 @@ admin = User.create(
   username: '{{ gitlab_admin_username }}',
   password: "{{ gitlab_admin_password }}",
   password_confirmation: "{{ gitlab_admin_password }}",
-  password_expires_at: Time.now,
   theme_id: {{ gitlab_admin_theme_id }}
 
 )
