@@ -24,7 +24,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.extra_vars = {
       gitlab_http_port: 8080,
       gitlab_https_port: 8443,
-      gitlab_https_enable: false
+      gitlab_https_enable: false,
+      gitlab_https_force: false
     }
   end
 
