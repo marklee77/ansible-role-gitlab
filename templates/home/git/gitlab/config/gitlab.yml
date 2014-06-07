@@ -224,9 +224,7 @@ production: &base
 
     # If you use non-standard ssh port you need to specify it
     #ssh_port: 22
-    {% if gitlab_ssh_port != 22 -%}
     ssh_port: {{ gitlab_ssh_port }}
-    {%- endif %}
 
   ## Git settings
   # CAUTION!
