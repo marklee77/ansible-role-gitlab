@@ -5,24 +5,27 @@ upstream gitlab {
 }
 
 server {
+
   listen {{ gitlab_http_port }};
-  listen {{ gitlab_https_port }} ssl;
   server_name {{ gitlab_hostname }};
   server_tokens off;     
   root /home/git/gitlab/public;
 
+  {% if gitlab_https_enable -%}
+  listen {{ gitlab_https_port }} ssl;
   ssl_certificate {{ gitlab_ssl_cert_file }};
   ssl_certificate_key {{ gitlab_ssl_key_file }};
   ssl_session_timeout 30m;
   ssl_protocols       SSLv3 TLSv1 TLSv1.1 TLSv1.2;
   ssl_ciphers         HIGH:!aNULL:!MD5;
 
-  {% if gitlab_force_https -%}
+  {% if gitlab_https_force -%}
   if ($scheme = http) {
     return 301 https://$server_name
     {%- if gitlab_https_port != 443 %}:{{ gitlab_https_port }}{% endif -%}
         $request_uri;
   }
+  {%- endif %}
   {%- endif %}
   
   # Increase this if you want to upload large attachments
