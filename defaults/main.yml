@@ -6,7 +6,7 @@ gitlab_hostname: localhost
 gitlab_ssh_hostname: "{{ gitlab_hostname }}"
 gitlab_http_port: 80
 gitlab_https_port: 443
-gitlab_https_enable: false
+gitlab_https_enable: true
 gitlab_https_force: false
 
 gitlab_ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
@@ -19,5 +19,5 @@ gitlab_admin_username: root
 gitlab_admin_password: testing123
 gitlab_admin_theme_id: "Gitlab::Theme::MARS"
 
-gitlab_signup_enabled: "false"
+gitlab_signup_enabled: false
 

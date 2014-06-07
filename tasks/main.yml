@@ -25,8 +25,8 @@
     - logrotate
     - nginx
     - redis-server
-    - ruby
-    - ruby-dev
+    - ruby1.9.1
+    - ruby1.9.1-dev
     - ssl-cert
     - zlib1g-dev
 
@@ -42,6 +42,14 @@
     home: /home/git
     createhome: yes
     state: present
+
+- name: update /home/git/.gitconfig from template
+  template:
+    src: home/git/.gitconfig
+    dest: /home/git/.gitconfig
+    owner: git
+    group: git
+    mode: 0600
 
 - name: ensure /srv/git exists and links to /home/git
   file:
@@ -72,13 +80,17 @@
     group: git
     mode: 0600
 
-- name: update /home/git/.gitconfig from template
-  template:
-    src: home/git/.gitconfig
-    dest: /home/git/.gitconfig
-    owner: git
-    group: git
-    mode: 0600
+- name: ensure that the system ruby points to 1.9.1
+  alternatives:
+    name: ruby
+    link: /usr/bin/ruby
+    path: /usr/bin/ruby1.9.1
+
+- name: ensure that the system gem points to 1.9.1
+  alternatives:
+    name: gem
+    link: /usr/bin/gem
+    path: /usr/bin/gem1.9.1
 
 - name: check gitlab out of git repository
   sudo_user: git
