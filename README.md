@@ -19,6 +19,25 @@ Role Variables
 - gitlab_hostname: hostname that gitlab will service, will be set to "localhost" by
                    default
 
+- gitlab_ssh_hostname: "{{ gitlab_hostname }}"
+- gitlab_ssh_port: 22
+- gitlab_http_port: 80
+- gitlab_https_port: 443
+- gitlab_https_enable: true
+- gitlab_https_force: true
+
+- gitlab_ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
+- gitlab_ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
+
+
+- gitlab_admin_email: "git@localhost.localdomain"
+- gitlab_admin_name: Administrator
+- gitlab_admin_username: root
+- gitlab_admin_password: 5iveL!fe
+- gitlab_admin_theme_id: "Gitlab::Theme::MARS"
+
+- gitlab_signup_enabled: false
+
 Example Playbook
 -------------------------
 
@@ -28,7 +47,7 @@ passed in as parameters) is always nice for users too:
     - hosts: all
       sudo: True
       roles:
-        - gitlab
+        - marklee77.gitlab
 
 Try it Out
 ---------------------------
