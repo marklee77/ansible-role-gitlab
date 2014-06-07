@@ -27,6 +27,7 @@
     - redis-server
     - ruby
     - ruby-dev
+    - ssl-cert
     - zlib1g-dev
 
 - name: ensure that git group exists
