@@ -9,6 +9,11 @@ vars/main.yml.
 This has only been trusted on Ubuntu trusty. It will not work as-is on precise
 as gitlab requires ruby 1.9 and precise uses ruby 1.8 as the system binary.
 
+Role Dependencies
+-----------------
+
+- marklee77.mariadb
+
 Role Variables
 --------------
 
