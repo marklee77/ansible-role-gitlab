@@ -1,5 +1,5 @@
-Role Name
-========
+marklee77.gitlab
+================
 
 The purpose of this role is to install gitlab to a web server and enable access
 with nginx. This install uses the MySQL backend rather than Postgres. The gitlab
