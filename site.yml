@@ -1,4 +1,5 @@
 - hosts: all
   sudo: True
+  gather_facts: False
   roles:
     - marklee77.gitlab
