@@ -4,16 +4,20 @@ gitlab_git_mysql_password: "{{ lookup('password', inventory_dir + '/credentials/
 
 gitlab_hostname: localhost
 gitlab_ssh_hostname: "{{ gitlab_hostname }}"
-gitlab_port: 80
-gitlab_https: "false"
+gitlab_http_port: 80
+gitlab_https_port: 443
+gitlab_https: false
+gitlab_force_https: false
 
-gitlab_signup_enabled: "false"
+gitlab_ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
+gitlab_ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
 
-gitlab_git_user_email: "git@localhost.localdomain"
 
-gitlab_admin_email: "{{ gitlab_git_user_email }}"
+gitlab_admin_email: "git@localhost.localdomain"
 gitlab_admin_name: Administrator
 gitlab_admin_username: root
 gitlab_admin_password: testing123
 gitlab_admin_theme_id: "Gitlab::Theme::MARS"
+
+gitlab_signup_enabled: "false"
 

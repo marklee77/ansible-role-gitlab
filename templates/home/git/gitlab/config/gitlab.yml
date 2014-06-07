@@ -16,7 +16,7 @@ production: &base
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
     host: {{ gitlab_hostname }}
-    port: {{ gitlab_port }}
+    port: {{ gitlab_http_port }}
     https: {{ gitlab_https }}
 
     # Uncommment this line below if your ssh host is different from HTTP/HTTPS one

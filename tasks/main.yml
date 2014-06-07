@@ -182,7 +182,7 @@
     group: root
     mode: 0644
   notify:
-    - restart gitlab
+    - restart nginx
 
 - name: ensure /etc/nginx/sites-enabled/gitlab exists and links to ../sites-available/gitlab
   file:
@@ -191,7 +191,7 @@
     force: yes
     state: link
   notify:
-    - restart gitlab
+    - restart nginx
 
 - name: ensure that there is not a hostname collision with the nginx default host
   lineinfile:
@@ -201,7 +201,7 @@
     line: '\1#\2'
     state: present
   notify:
-    - restart gitlab
+    - restart nginx
 
 - name: ensure gitlab services are started and enabled
   service:
