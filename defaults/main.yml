@@ -17,7 +17,7 @@ gitlab_ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
 gitlab_admin_email: "git@localhost.localdomain"
 gitlab_admin_name: Administrator
 gitlab_admin_username: root
-gitlab_admin_password: testing123
+gitlab_admin_password: 5iveL!fe
 gitlab_admin_theme_id: "Gitlab::Theme::MARS"
 
 gitlab_signup_enabled: false
