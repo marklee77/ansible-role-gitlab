@@ -133,9 +133,6 @@
     - /home/git/repositories
     - /home/git/repositories/root
 
-- debug:
-    msg: "{{ lookup('pipe', 'pwd') }}"
-
 - name: update gitlab config files from templates
   template:
     src: home/git/gitlab/{{ item }}
