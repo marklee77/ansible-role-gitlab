@@ -17,8 +17,6 @@ Role Dependencies
 Role Variables
 --------------
 
-- gitlab_root_mysql_password: root mysql password, will be set to a random value 
-                              by default.
 - gitlab_git_mysql_password: git mysql password, will be set to a random value 
                              by default
 - gitlab_hostname: hostname that gitlab will service, will be set to "localhost" by

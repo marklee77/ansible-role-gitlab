@@ -1,6 +1,5 @@
 ---
-gitlab_root_mysql_password: "{{ lookup('password', inventory_dir + '/credentials/root-mysql-password') }}"
-gitlab_git_mysql_password: "{{ lookup('password', inventory_dir + '/credentials/git-mysql-password') }}"
+gitlab_git_mysql_password: "{{ lookup('password', inventory_dir + '/private/credentials/git-mysql-password') }}"
 
 gitlab_hostname: localhost
 gitlab_ssh_hostname: "{{ gitlab_hostname }}"
