@@ -1,5 +1,6 @@
 ---
-gitlab_git_mysql_password: "{{ lookup('password', inventory_dir + '/private/credentials/git-mysql-password') }}"
+gitlab_run_dir: "{{ lookup('env', 'PWD') }}"
+gitlab_git_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/git-mysql-password') }}"
 
 gitlab_hostname: localhost
 gitlab_ssh_hostname: "{{ gitlab_hostname }}"
@@ -7,7 +8,7 @@ gitlab_ssh_port: 22
 gitlab_http_port: 80
 gitlab_https_port: 443
 gitlab_https_enable: true
-gitlab_https_force: true
+gitlab_require_ssl: true
 
 gitlab_ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
 gitlab_ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key

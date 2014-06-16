@@ -25,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       gitlab_http_port: 8080,
       gitlab_https_port: 8443,
       gitlab_https_enable: false,
-      gitlab_https_force: false,
+      gitlab_require_ssl: false,
       gitlab_ssh_port: "{{ ansible_ssh_port }}"
     }
   end

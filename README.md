@@ -27,7 +27,7 @@ Role Variables
 - gitlab_http_port: 80
 - gitlab_https_port: 443
 - gitlab_https_enable: true
-- gitlab_https_force: true
+- gitlab_require_ssl: true
 
 - gitlab_ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
 - gitlab_ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
