@@ -1,5 +1,5 @@
 ---
-- name: ensure dependencies available through apt are installed
+- name: ensure gitlab dependency packages are installed
   apt: 
     pkg: "{{ item }}" 
     state: latest 
@@ -132,7 +132,7 @@
     - /home/git/repositories
     - /home/git/repositories/root
 
-- name: update gitlab config files from templates
+- name: update gitlab configuration files from templates
   template:
     src: home/git/gitlab/{{ item }}
     dest: /home/git/gitlab/{{ item }}
