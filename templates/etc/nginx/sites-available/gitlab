@@ -11,7 +11,7 @@ server {
   server_tokens off;     
   root /home/git/gitlab/public;
 
-  {% if gitlab_https_enable -%}
+  {% if gitlab_enable_ssl -%}
   listen {{ gitlab_https_port }} ssl;
   ssl_certificate {{ gitlab_ssl_cert_file }};
   ssl_certificate_key {{ gitlab_ssl_key_file }};

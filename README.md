@@ -26,17 +26,17 @@ Role Variables
 - gitlab_ssh_port: 22
 - gitlab_http_port: 80
 - gitlab_https_port: 443
-- gitlab_https_enable: true
+- gitlab_enable_ssl: true
 - gitlab_require_ssl: true
 
-- gitlab_ssl_cert_file: /etc/ssl/certs/ssl-cert-snakeoil.pem
-- gitlab_ssl_key_file: /etc/ssl/private/ssl-cert-snakeoil.key
+- gitlab_ssl_cert_file: 
+- gitlab_ssl_key_file: 
 
 
 - gitlab_admin_email: "git@localhost.localdomain"
 - gitlab_admin_name: Administrator
 - gitlab_admin_username: root
-- gitlab_admin_password: 5iveL!fe
+- gitlab_admin_password: password
 - gitlab_admin_theme_id: "Gitlab::Theme::MARS"
 
 - gitlab_signup_enabled: false

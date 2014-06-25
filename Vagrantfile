@@ -9,7 +9,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
 
   config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.network "forwarded_port", guest: 8443, host: 8443
 
   config.vm.provider "virtualbox" do |v|
     v.memory = 1280
@@ -23,8 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = "site.yml"
     ansible.extra_vars = {
       gitlab_http_port: 8080,
-      gitlab_https_port: 8443,
-      gitlab_https_enable: false,
+      gitlab_enable_ssl: false,
       gitlab_require_ssl: false,
       gitlab_ssh_port: "{{ ansible_ssh_port }}"
     }

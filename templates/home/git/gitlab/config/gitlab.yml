@@ -16,7 +16,7 @@ production: &base
   gitlab:
     ## Web server settings (note: host is the FQDN, do not include http://)
     host: {{ gitlab_hostname }}
-    {% if gitlab_https_enable -%}
+    {% if gitlab_enable_ssl -%}
     port: {{ gitlab_https_port }}
     https: true
     {% else -%}
