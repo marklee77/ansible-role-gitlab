@@ -8,6 +8,7 @@ vars/main.yml.
 
 This has only been trusted on Ubuntu trusty. It will not work as-is on precise
 as gitlab requires ruby 1.9 and precise uses ruby 1.8 as the system binary.
+Thus, this role is not currently being tested with travis.
 
 Role Dependencies
 -----------------
@@ -44,9 +45,6 @@ Role Variables
 Example Playbook
 -------------------------
 
-Including an example of how to use your role (for instance, with variables 
-passed in as parameters) is always nice for users too:
-
     - hosts: all
       sudo: True
       roles:
@@ -66,5 +64,5 @@ Affero GPL
 Author Information
 ------------------
 
-http://marklee77.github.io
+http://stillwell.me
 

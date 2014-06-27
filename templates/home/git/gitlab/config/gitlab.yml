@@ -59,7 +59,7 @@ production: &base
 
     ## Users management
     # default: false - Account passwords are not sent via the email if signup is enabled.
-    signup_enabled: {{ gitlab_signup_enabled }}
+    signup_enabled: {{ gitlab_enable_signup }}
     #
     # default: true - If set to false, standard login form won't be shown on the sign-in page
     # signin_enabled: false
@@ -134,15 +134,17 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: {{ gitlab_enable_ldap }}
-    host: {{ gitlab_ldap_host }}
-    port: {{ gitlab_ldap_port }}
-    uid: {{ gitlab_ldap_uid }}
-    method: {{ gitlab_ldap_method }} # "tls" or "ssl" or "plain"
-    bind_dn: {{ gitlab_ldap_bind_dn }}
-    password: {{ gitlab_ldap_bind_password }}
+    {% if gitlab_enable_ldap %}
+    host: {{ ldap_auth_host }}
+    port: {{ ldap_auth_port }}
+    uid: {{ ldap_auth_uid_attribute }}
+    method: {{ ldap_auth_method }} # "tls" or "ssl" or "plain"
+    bind_dn: {{ ldap_auth_bind_dn }}
+    password: {{ ldap_auth_bind_password }}
     allow_username_or_email_login: true
-    base: {{ gitlab_ldap_user_base_dn }}
-    user_filter: {{ gitlab_ldap_user_filter }}
+    base: {{ ldap_auth_base_dn }}
+    user_filter: {{ ldap_auth_user_filter }}
+    {% endif %}
 
   ## OmniAuth settings
   omniauth:
