@@ -19,15 +19,6 @@ gitlab_admin_username: root
 gitlab_admin_password: password
 gitlab_admin_theme_id: "Gitlab::Theme::MARS"
 
-gitlab_signup_enabled: false
+gitlab_enable_signup: false
 
 gitlab_enable_ldap: false
-gitlab_ldap_host: localhost
-gitlab_ldap_port: 389
-gitlab_ldap_uid: uid
-gitlab_ldap_method: plain
-gitlab_ldap_bind_dn: cn=admin,dc=localdomain
-gitlab_ldap_bind_password: password
-gitlab_ldap_user_base_dn: ou=users,dc=localdomain
-gitlab_ldap_user_filter: ""
-
