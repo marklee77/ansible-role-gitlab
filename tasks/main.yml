@@ -29,6 +29,22 @@
     - ruby1.9.1-dev
     - zlib1g-dev
 
+- name: ensure that gitlab user exists in ldap
+  ldap:
+    bind_dn: cn=admin,{{ ldap_auth_base_dn }}
+    bind_password: "{{ ldap_auth_admin_password }}"
+    entry_dn: uid=gitlab,ou=services,{{ ldap_auth_base_dn }}
+    attributes:
+      - objectClass: account
+      - objectClass: simpleSecurityObject
+      - uid: gitlab
+      - userPassword: "{{ gitlab_ldap_password|ssha_password_hash(gitlab_ldap_password_salt) }}"
+    modify_action: replace
+    state: present
+  when: gitlab_enable_ldap
+  notify:
+    - restart gitlab
+
 - name: ensure that git group exists
   group:
     name: git

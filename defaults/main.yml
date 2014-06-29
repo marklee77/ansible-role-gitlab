@@ -1,6 +1,9 @@
 ---
 gitlab_run_dir: "{{ lookup('env', 'PWD') }}"
 gitlab_git_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/git-mysql-password') }}"
+gitlab_ldap_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password') }}"
+gitlab_ldap_password_salt: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password-salt length=4') }}"
+
 
 gitlab_hostname: localhost
 gitlab_ssh_hostname: "{{ gitlab_hostname }}"

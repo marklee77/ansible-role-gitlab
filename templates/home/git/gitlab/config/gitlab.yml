@@ -135,12 +135,12 @@ production: &base
   ldap:
     enabled: {{ gitlab_enable_ldap }}
     {% if gitlab_enable_ldap %}
-    host: {{ ldap_auth_host }}
+    host: {{ ldap_auth_hostname }}
     port: {{ ldap_auth_port }}
     uid: {{ ldap_auth_uid_attribute }}
     method: {{ ldap_auth_method }} # "tls" or "ssl" or "plain"
-    bind_dn: {{ ldap_auth_bind_dn }}
-    password: {{ ldap_auth_bind_password }}
+    bind_dn: uid=gitlab,ou=services,{{ ldap_auth_base_dn }}
+    password: {{ gitlab_ldap_password }}
     allow_username_or_email_login: true
     base: {{ ldap_auth_base_dn }}
     user_filter: {{ ldap_auth_user_filter }}
