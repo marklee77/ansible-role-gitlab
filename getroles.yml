@@ -13,3 +13,4 @@
         update: yes
       with_items:
         - mariadb
+        - modules-extra
