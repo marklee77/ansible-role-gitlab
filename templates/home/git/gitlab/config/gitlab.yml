@@ -134,7 +134,7 @@ production: &base
   #   bundle exec rake gitlab:ldap:check RAILS_ENV=production
   ldap:
     enabled: {{ gitlab_enable_ldap }}
-    {% if gitlab_enable_ldap %}
+    {% if gitlab_enable_ldap -%}
     host: {{ ldap_auth_hostname }}
     port: {{ ldap_auth_port }}
     uid: {{ ldap_auth_uid_attribute }}
@@ -144,7 +144,7 @@ production: &base
     allow_username_or_email_login: true
     base: {{ ldap_auth_base_dn }}
     user_filter: {{ ldap_auth_user_filter }}
-    {% endif %}
+    {%- endif %}
 
   ## OmniAuth settings
   omniauth:
