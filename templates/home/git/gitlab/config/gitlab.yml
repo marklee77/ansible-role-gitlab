@@ -45,7 +45,8 @@ production: &base
     support_email: {{ gitlab_admin_email }}
 
     ## User settings
-    default_projects_limit: 0
+    default_projects_limit: 2000
+
     # default_can_create_group: false  # default: true
     # username_changing_enabled: false # default: true - User can change her username/namespace
     ## Default theme
