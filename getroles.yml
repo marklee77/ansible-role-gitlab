@@ -12,5 +12,5 @@
         dest: roles/marklee77.{{ item }}
         update: yes
       with_items:
-        - mariadb
         - modules-extra
+        - mariadb

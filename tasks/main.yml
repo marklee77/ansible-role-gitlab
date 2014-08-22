@@ -24,6 +24,7 @@
     - libyaml-dev
     - logrotate
     - nginx
+    - python-mysqldb
     - redis-server
     - ruby1.9.1
     - ruby1.9.1-dev
@@ -75,10 +76,16 @@
 
 - name: ensure gitlabhq_production database is present
   mysql_db: 
+    login_host: "{{ gitlab_mysql_host }}"
+    login_user: root
+    login_password: "{{ gitlab_root_mysql_password }}"
     name: gitlabhq_production
 
 - name: ensure git database user is present
   mysql_user: 
+    login_host: "{{ gitlab_mysql_host }}"
+    login_user: root
+    login_password: "{{ gitlab_root_mysql_password }}"
     name: git
     host: "{{ item }}" 
     password: "{{ gitlab_git_mysql_password }}" 
@@ -109,8 +116,15 @@
 
 - name: check gitlab out of git repository
   sudo_user: git
-  command: git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 6-9-stable /home/git/gitlab
-           creates=/home/git/gitlab
+  git:
+    repo: https://gitlab.com/gitlab-org/gitlab-ce.git -b 
+    version: "{{ gitlab_checkout_version }}"
+    dest: /home/git/gitlab
+
+#- name: check gitlab out of git repository
+#  sudo_user: git
+#  command: git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 6-9-stable /home/git/gitlab
+#           creates=/home/git/gitlab
 
 - name: ensure publicly accessible gitlab subdirectories exist and have correct permissions
   file:
