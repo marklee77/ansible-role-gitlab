@@ -59,7 +59,7 @@ your web browser.
 License
 -------
 
-Affero GPL
+GPLv2
 
 Author Information
 ------------------
