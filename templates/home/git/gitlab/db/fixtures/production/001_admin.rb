@@ -1,7 +1,7 @@
 admin = User.create(
   email: "{{ gitlab_admin_email }}",
   name: "{{ gitlab_admin_name }}",
-  username: '{{ gitlab_admin_username }}',
+  username: "{{ gitlab_admin_username }}",
   password: "{{ gitlab_admin_password }}",
   password_confirmation: "{{ gitlab_admin_password }}",
   theme_id: {{ gitlab_admin_theme_id }}

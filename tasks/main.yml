@@ -117,9 +117,11 @@
 - name: check gitlab out of git repository
   sudo_user: git
   git:
-    repo: https://gitlab.com/gitlab-org/gitlab-ce.git -b 
+    repo: https://gitlab.com/gitlab-org/gitlab-ce.git
+    accept_hostkey: yes
     version: "{{ gitlab_checkout_version }}"
     dest: /home/git/gitlab
+    update: no
 
 #- name: check gitlab out of git repository
 #  sudo_user: git
