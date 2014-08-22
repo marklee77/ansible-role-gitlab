@@ -13,15 +13,21 @@ Thus, this role is not currently being tested with travis.
 Role Dependencies
 -----------------
 
-- marklee77.mariadb
+- marklee77.modules-extra
 
 Role Variables
 --------------
 
+- gitlab_mysql_host: localhost
+
+- gitlab_root_mysql_password: root mysql password
 - gitlab_git_mysql_password: git mysql password, will be set to a random value 
                              by default
 - gitlab_hostname: hostname that gitlab will service, will be set to "localhost" by
                    default
+
+
+- gitlab_checkout_version: 7-1-stable
 
 - gitlab_ssh_hostname: "{{ gitlab_hostname }}"
 - gitlab_ssh_port: 22
@@ -48,6 +54,7 @@ Example Playbook
     - hosts: all
       sudo: True
       roles:
+        - marklee77.mariadb
         - marklee77.gitlab
 
 Try it Out
