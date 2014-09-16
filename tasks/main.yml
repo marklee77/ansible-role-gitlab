@@ -123,11 +123,6 @@
     dest: /home/git/gitlab
     update: no
 
-#- name: check gitlab out of git repository
-#  sudo_user: git
-#  command: git clone https://gitlab.com/gitlab-org/gitlab-ce.git -b 6-9-stable /home/git/gitlab
-#           creates=/home/git/gitlab
-
 - name: ensure publicly accessible gitlab subdirectories exist and have correct permissions
   file:
     path: "{{ item }}"

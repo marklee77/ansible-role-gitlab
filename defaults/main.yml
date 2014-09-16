@@ -1,7 +1,7 @@
 ---
 gitlab_run_dir: "{{ lookup('env', 'PWD') }}"
 
-gitlab_root_mysql_password: "{{ lookup('password', mariadb_run_dir + '/private/credentials/root-mysql-password') }}"
+gitlab_root_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/root-mysql-password') }}"
 gitlab_git_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/git-mysql-password') }}"
 gitlab_ldap_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password') }}"
 gitlab_ldap_password_salt: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password-salt length=4') }}"
@@ -18,8 +18,8 @@ gitlab_https_port: 443
 gitlab_enable_ssl: true
 gitlab_require_ssl: true
 
-gitlab_ssl_cert_file: 
-gitlab_ssl_key_file: 
+gitlab_ssl_cert_file: /etc/ssl/certs/gitlab.pem
+gitlab_ssl_key_file: /etc/ssl/private/gitlab.pem
 
 gitlab_admin_email: "git@localhost.localdomain"
 gitlab_admin_name: Administrator

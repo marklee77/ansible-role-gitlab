@@ -7,4 +7,3 @@ production:
   host: "{{ gitlab_mysql_host }}"
   username: git
   password: "{{ gitlab_git_mysql_password }}"
-  # socket: /tmp/mysql.sock
