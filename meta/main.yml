@@ -3,7 +3,7 @@ galaxy_info:
   author: Mark Stillwell
   description: GitLab web service
   license: GPLv2
-  min_ansible_version: 1.2
+  min_ansible_version: 1.6
   platforms:
   - name: Ubuntu
     versions:
