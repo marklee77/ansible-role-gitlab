@@ -9,6 +9,7 @@
     - build-essential
     - bundler
     - checkinstall
+    - cmake
     - curl
     - git
     - libcurl4-openssl-dev
