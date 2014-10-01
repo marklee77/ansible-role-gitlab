@@ -3,8 +3,6 @@ gitlab_run_dir: "{{ lookup('env', 'PWD') }}"
 
 gitlab_root_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/root-mysql-password') }}"
 gitlab_git_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/git-mysql-password') }}"
-gitlab_ldap_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password') }}"
-gitlab_ldap_password_salt: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password-salt length=4') }}"
 
 gitlab_mysql_host: localhost
 
@@ -30,3 +28,8 @@ gitlab_admin_theme_id: "Gitlab::Theme::MARS"
 gitlab_enable_signup: false
 
 gitlab_enable_ldap: false
+
+gitlab_ldap_bind_dn: uid=gitlab,ou=services,dc=localhost,dc=localdomain
+gitlab_ldap_password: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password') }}"
+gitlab_ldap_password_salt: "{{ lookup('password', gitlab_run_dir + '/private/credentials/gitlab-ldap-password-salt length=4') }}"
+

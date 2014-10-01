@@ -140,7 +140,7 @@ production: &base
     port: {{ ldap_auth_port }}
     uid: {{ ldap_auth_uid_attribute }}
     method: {{ ldap_auth_method }} # "tls" or "ssl" or "plain"
-    bind_dn: uid=gitlab,ou=services,{{ ldap_auth_base_dn }}
+    bind_dn: {{ gitlab_ldap_bind_dn }}
     password: {{ gitlab_ldap_password }}
     allow_username_or_email_login: true
     base: {{ ldap_auth_base_dn }}
