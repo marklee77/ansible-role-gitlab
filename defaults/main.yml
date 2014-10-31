@@ -6,6 +6,9 @@ gitlab_git_mysql_password: "{{ lookup('password', gitlab_run_dir + '/private/cre
 
 gitlab_mysql_host: 127.0.0.1
 
+# FIXME: not used...
+gitlab_mysql_port: 3306
+
 gitlab_checkout_version: 7-2-stable
 
 gitlab_hostname: localhost

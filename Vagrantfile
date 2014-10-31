@@ -1,23 +1,40 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
+require 'fileutils'
 
+def local_cache(basebox_name)
+  cache_dir = Vagrant::Environment.new.home_path.join('cache',  basebox_name)
+  FileUtils.mkpath cache_dir unless cache_dir.exist?
+  cache_dir
+end
+
+ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
+
+VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "ubuntu/trusty64"
+
+  config.vm.synced_folder local_cache('ubuntu/trusty64'),
+                          "/var/cache/apt/archives/"
+
   config.vm.network "forwarded_port", guest: 8080, host: 8080
 
-  config.vm.provider "virtualbox" do |v|
-    v.memory = 1280
+  config.vm.provider "docker" do |d|
+    d.image      = "marklee77/baseimage-python-docker"
+    d.cmd        = ["/sbin/my_init", "--enable-insecure-key"]
+    d.has_ssh    = true
+    d.privileged = true
+  end
+
+  config.ssh.username = "root"
+  config.ssh.private_key_path = "keys/phusion.key"
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/getreqs.yml"
   end
 
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "getroles.yml"
-  end
-
-  config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "site.yml"
+    ansible.playbook = "provisioning/deploy.yml"
     ansible.extra_vars = {
       gitlab_http_port: 8080,
       gitlab_enable_ssl: false,
@@ -25,5 +42,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       gitlab_ssh_port: "{{ ansible_ssh_port }}"
     }
   end
+
+  #config.vm.provision "ansible" do |ansible|
+  #  ansible.playbook = "provisioning/test.yml"
+  #end
 
 end
