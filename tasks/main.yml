@@ -1,0 +1,11 @@
+---
+#- include: docker.yml
+#  when: mariadb_dockerized_deployment
+
+- include: mysql.yml
+
+- include: install.yml
+  when: not mariadb_dockerized_deployment
+
+#- include: configure.yml
+#  when: not mariadb_dockerized_deployment 
