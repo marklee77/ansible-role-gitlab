@@ -25,6 +25,8 @@
     - libyaml-dev
     - logrotate
     - nginx
+    - pkgconfig
+    - python-docutils
     - python-mysqldb
     - redis-server
     - ruby1.9.1
@@ -124,6 +126,14 @@
     - /home/git/repositories
     - /home/git/repositories/root
 
+- name: ensure redis service is started and enabled
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - redis-server
+
 - name: bundle install ruby gems
   sudo_user: git
   shell: bundle install --deployment --without development test postgres aws && touch .bundle_installed
@@ -163,11 +173,4 @@
     - { path: /etc/default/gitlab, src: /home/git/gitlab/lib/support/init.d/gitlab.default.example }
     - { path: /etc/logrotate.d/gitlab, src: /home/git/gitlab/lib/support/logrotate/gitlab }
 
-- name: ensure gitlab service is started and enabled
-  service:
-    name: "{{ item }}"
-    state: started
-    enabled: yes
-  with_items:
-    - gitlab
-
+# ensure redis is shutdown for docker?

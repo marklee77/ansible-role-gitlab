@@ -19,6 +19,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.network "forwarded_port", guest: 8080, host: 8080
 
+  config.vm.post_up_message "connect to port 8080!"
+
   config.vm.provider "docker" do |d|
     d.image      = "marklee77/baseimage-python-docker"
     d.cmd        = ["/sbin/my_init", "--enable-insecure-key"]

@@ -73,3 +73,6 @@ Author Information
 
 http://stillwell.me
 
+Todo
+----
+- use redis from official container, move into prep...
