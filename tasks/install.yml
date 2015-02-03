@@ -29,21 +29,21 @@
     - python-docutils
     - python-mysqldb
     - redis-server
-    - ruby1.9.1
-    - ruby1.9.1-dev
+    - ruby2.0
+    - ruby2.0-dev
     - zlib1g-dev
 
-- name: ensure that the system ruby points to 1.9.1
+- name: ensure that the system ruby points to 2.0
   alternatives:
     name: ruby
     link: /usr/bin/ruby
-    path: /usr/bin/ruby1.9.1
+    path: /usr/bin/ruby2.0
 
-- name: ensure that the system gem points to 1.9.1
+- name: ensure that the system gem points to 2.0
   alternatives:
     name: gem
     link: /usr/bin/gem
-    path: /usr/bin/gem1.9.1
+    path: /usr/bin/gem2.0
 
 - name: ensure that git group exists
   group:

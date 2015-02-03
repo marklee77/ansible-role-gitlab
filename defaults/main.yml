@@ -9,7 +9,7 @@ gitlab_mysql_host: 127.0.0.1
 # FIXME: not used...
 gitlab_mysql_port: 3306
 
-gitlab_checkout_version: 7-2-stable
+gitlab_checkout_version: v7.7.2
 
 gitlab_hostname: localhost
 gitlab_ssh_hostname: "{{ gitlab_hostname }}"
