@@ -3,19 +3,10 @@
 
 require 'fileutils'
 
-def local_cache(basebox_name)
-  cache_dir = Vagrant::Environment.new.home_path.join('cache',  basebox_name)
-  FileUtils.mkpath cache_dir unless cache_dir.exist?
-  cache_dir
-end
-
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'docker'
 
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
-  config.vm.synced_folder local_cache('ubuntu/trusty64'),
-                          "/var/cache/apt/archives/"
 
   config.vm.network "forwarded_port", guest: 8080, host: 8080
 
