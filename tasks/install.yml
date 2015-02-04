@@ -16,6 +16,7 @@
     - libffi-dev
     - libgdbm-dev
     - libicu-dev
+    - libkrb5-dev
     - libmariadbclient-dev
     - libncurses5-dev
     - libreadline-dev
@@ -25,7 +26,7 @@
     - libyaml-dev
     - logrotate
     - nginx
-    - pkgconfig
+    - pkg-config
     - python-docutils
     - python-mysqldb
     - redis-server
@@ -84,10 +85,9 @@
 - name: check gitlab out of git repository
   sudo_user: git
   git:
-    repo: https://gitlab.com/gitlab-org/gitlab-ce.git
-    accept_hostkey: yes
-    version: "{{ gitlab_checkout_version }}"
     dest: /home/git/gitlab
+    repo: https://gitlab.com/gitlab-org/gitlab-ce.git
+    version: "{{ gitlab_checkout_version }}"
     update: no
 
 - name: ensure publicly accessible gitlab subdirectories exist and have correct permissions
@@ -143,7 +143,7 @@
 
 - name: install gitlab shell
   sudo_user: git
-  shell: bundle exec rake gitlab:shell:install[v1.9.3] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .gitlab_shell_installed
+  shell: bundle exec rake gitlab:shell:install[v2.4.1] REDIS_URL=redis://localhost:6379 RAILS_ENV=production && touch .gitlab_shell_installed
          executable=/bin/bash
          chdir=/home/git/gitlab
          creates=/home/git/gitlab/.gitlab_shell_installed
@@ -173,4 +173,8 @@
     - { path: /etc/default/gitlab, src: /home/git/gitlab/lib/support/init.d/gitlab.default.example }
     - { path: /etc/logrotate.d/gitlab, src: /home/git/gitlab/lib/support/logrotate/gitlab }
 
-# ensure redis is shutdown for docker?
+- name: ensure redis server is shutdown cleanly for docker
+  service:
+    name: redis-server
+    state: stopped
+  when: gitlab_dockerized_deployment
