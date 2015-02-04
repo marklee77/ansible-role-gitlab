@@ -181,9 +181,10 @@
     - config/database.yml
     - config/resque.yml
     - config/unicorn.rb
-    - db/fixtures/production/001_admin.rb
   notify:
     - restart gitlab
+
+#    - db/fixtures/production/001_admin.rb
 
 - name: bundle install ruby gems
   sudo_user: git
@@ -208,7 +209,7 @@
 
 - name: initialize database
   sudo_user: git
-  shell: bundle exec rake gitlab:setup RAILS_ENV=production <<< "yes" && touch .gitlab_db_setup
+  shell: bundle exec rake gitlab:setup RAILS_ENV=production GITLAB_ROOT_PASSWORD={{ gitlab_admin_password }} <<< "yes" && touch .gitlab_db_setup
          executable=/bin/bash
          chdir=/home/git/gitlab
          creates=/home/git/gitlab/.gitlab_db_setup
