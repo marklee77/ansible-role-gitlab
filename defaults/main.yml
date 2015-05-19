@@ -21,6 +21,7 @@ gitlab_require_ssl: true
 
 gitlab_ssl_cert_file: /etc/ssl/certs/gitlab.pem
 gitlab_ssl_key_file: /etc/ssl/private/gitlab.pem
+gitlab_ssl_trusted_certificate_file: /etc/ssl/certs/ca-certificates.crt
 
 gitlab_admin_email: "git@localhost.localdomain"
 gitlab_admin_name: Administrator
