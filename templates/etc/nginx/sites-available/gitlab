@@ -2,10 +2,30 @@ upstream gitlab {
   server unix:/home/git/gitlab/tmp/sockets/gitlab.socket;
 }
 
+{% if gitlab_enable_ssl and gitlab_require_ssl -%}
 server {
 
   listen {{ gitlab_http_port }};
   server_name {{ gitlab_hostname }};
+
+  server_tokens off;     
+
+  add_header Strict-Transport-Security "max-age=15768000; includeSubDomains";
+
+  return 301 https://$server_name
+  {%- if gitlab_https_port != 443 %}:{{ gitlab_https_port }}{% endif -%}
+  $request_uri;
+
+}
+{%- endif %}
+  
+server {
+
+  server_name {{ gitlab_hostname }};
+
+  {% if not gitlab_require_ssl -%}
+  listen {{ gitlab_http_port }};
+  {%- endif %}
 
   server_tokens off;     
 
@@ -31,11 +51,6 @@ server {
 
   {% if gitlab_require_ssl -%}
   add_header Strict-Transport-Security "max-age=15768000; includeSubDomains";
-  if ($scheme = http) {
-    return 301 https://$server_name
-    {%- if gitlab_https_port != 443 %}:{{ gitlab_https_port }}{% endif -%}
-        $request_uri;
-  }
   {%- endif %}
   {%- endif %}
   
@@ -67,7 +82,8 @@ server {
 
   }
 
-  # Enable gzip compression as per rails guide: http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
+  # Enable gzip compression as per rails guide: 
+  #     http://guides.rubyonrails.org/asset_pipeline.html#gzip-compression
   # WARNING: If you are using relative urls do remove the block below
   # See config/application.rb under "Relative url support" for the list of
   # other files that need to be changed for relative url support
