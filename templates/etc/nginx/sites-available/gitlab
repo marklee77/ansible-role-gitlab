@@ -29,11 +29,18 @@ server {
 
   server_tokens off;     
 
+  add_header X-Frame-Options SAMEORIGIN;
+  add_header X-Content-Type-Options nosniff;
+  add_header X-XSS-Protection "1; mode=block";
+
   # Increase this if you want to upload large attachments
   # Or if you want to accept large git objects over http
   client_max_body_size 20m;
 
   {% if gitlab_enable_ssl -%}
+  {% if gitlab_require_ssl -%}
+  add_header Strict-Transport-Security "max-age=15768000; includeSubDomains";
+  {%- endif %}
   listen {{ gitlab_https_port }} ssl;
   ssl_certificate {{ gitlab_ssl_cert_file }};
   ssl_certificate_key {{ gitlab_ssl_key_file }};
@@ -49,9 +56,6 @@ server {
   ssl_stapling_verify on;
   ssl_trusted_certificate {{ gitlab_ssl_trusted_certificate_file }};
 
-  {% if gitlab_require_ssl -%}
-  add_header Strict-Transport-Security "max-age=15768000; includeSubDomains";
-  {%- endif %}
   {%- endif %}
   
   root /home/git/gitlab/public;
